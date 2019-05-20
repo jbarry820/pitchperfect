@@ -58,6 +58,7 @@ class PlaySoundsViewController: UIViewController {
         super.viewDidLoad()
         setupAudio()
 
+        // MARK: For purpose of making buttons so they are nor distorted
         slowButton.contentMode = .center
         slowButton.imageView?.contentMode = .scaleAspectFit
         fastButton.contentMode = .center
@@ -75,5 +76,10 @@ class PlaySoundsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureUI(.notPlaying)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopAudio()
     }
 }

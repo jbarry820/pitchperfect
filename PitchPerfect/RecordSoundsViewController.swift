@@ -19,12 +19,18 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // MARK: For purpose of making buttons so they are nor distorted
         stopRecordingButton.isEnabled = false
+        stopRecordingButton.contentMode = .center
+        stopRecordingButton.imageView?.contentMode = .scaleAspectFit
+        recordButton.contentMode = .center
+        recordButton.imageView?.contentMode = .scaleAspectFit
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//    }
 
     @IBAction func recordAudio(_ sender: Any) {
         appIsRecording(isRecording: true)
@@ -56,21 +62,30 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         if flag {
             performSegue(withIdentifier: "stopRecording", sender: audioRecorder.url)
         } else {
-            print("recording was not successful")
+            //print("recording was not successful")
+            let alert = UIAlertController(title: "Audio Failed", message: "Recording Failed.", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+            
+            self.present(alert, animated: true)
         }
     }
     
     // This function is in response to "Cleaning up RecordSoundsViewController instructions
     func appIsRecording(isRecording: Bool) {
-        if isRecording == true {
-            recordingLabel.text = "Recording in Progress"
-            stopRecordingButton.isEnabled = true
-            recordButton.isEnabled = false
-        } else {
-            recordButton.isEnabled = true
-            stopRecordingButton.isEnabled = false
-            recordingLabel.text = "Tap to Record"
-        }
+        stopRecordingButton.isEnabled = isRecording // to enable the button
+        recordButton.isEnabled = !isRecording // to disable the button
+        recordingLabel.text = isRecording ? "Recording in Progress" : "Tap to Record"
+//        if isRecording == true {
+//            recordingLabel.text = "Recording in Progress"
+//            stopRecordingButton.isEnabled = true
+//            recordButton.isEnabled = false
+//        } else {
+//            recordButton.isEnabled = true
+//            stopRecordingButton.isEnabled = false
+//            recordingLabel.text = "Tap to Record"
+//        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
